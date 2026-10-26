@@ -1,0 +1,12 @@
+```text
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+.aws/
+__pycache__/
+*.pyc
+.DS_Store
+```
