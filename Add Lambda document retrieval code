@@ -1,0 +1,37 @@
+import json
+import boto3
+import os
+
+s3 = boto3.client("s3")
+
+def lambda_handler(event, context):
+    try:
+        bucket = os.environ["DOCUMENTS_BUCKET"]
+        key = event.get("document_key", "aws_notes.txt")
+
+        response = s3.get_object(
+            Bucket=bucket,
+            Key=key
+        )
+
+        document_text = response["Body"].read().decode("utf-8")
+
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": json.dumps({
+                "message": "Document read successfully",
+                "document": key,
+                "content": document_text
+            })
+        }
+
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({
+                "error": str(e)
+            })
+        }
